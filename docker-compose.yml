@@ -1,0 +1,59 @@
+services:
+
+  traefik:
+    image: traefik:v3.6.1
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+
+    volumes:
+      - ./traefik/dynamic/:/etc/traefik/dynamic/:ro
+      - ./traefik/certs:/certs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    networks:
+      - web
+
+    command:
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=${NETWORK_NAME}"
+
+      - "--providers.file.filename=/etc/traefik/dynamic/traefik_dynamic.yml"
+      - "--providers.file.watch=true"
+
+      - "--api.dashboard=true"
+      - "--api.insecure=false"
+
+      - "--log.level=DEBUG"
+      - "--accesslog=true"
+      - "--metrics.prometheus=true"
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_DASHBOARD_DOMAIN}`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.tls=true"
+
+      # Basic‑auth middleware
+      # - "traefik.http.middlewares.dashboard-auth.basicauth.users=admin:$$apr1$$0B/Dz.El$$GnZpNWj.sHjWmc888iwQn."
+      # - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
+
+networks:
+  web:
+    name: ${NETWORK_NAME}
+    external: true

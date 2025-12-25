@@ -1,0 +1,14 @@
+# Dynamic configuration: TLS certificates (mkcert files placed in /certs) and dashboard router
+
+tls:
+  certificates:
+    - certFile: /certs/traefik.microservices.local.pem
+      keyFile: /certs/traefik.microservices.local-key.pem
+    - certFile: /certs/sso.microservices.local.pem
+      keyFile: /certs/sso.microservices.local-key.pem
+    - certFile: /certs/users.microservices.local.pem
+      keyFile: /certs/users.microservices.local-key.pem
+    - certFile: /certs/sso-db.microservices.local.pem
+      keyFile: /certs/sso-db.microservices.local-key.pem
+    - certFile: /certs/sso-vite.microservices.local.pem
+      keyFile: /certs/sso-vite.microservices.local-key.pem
