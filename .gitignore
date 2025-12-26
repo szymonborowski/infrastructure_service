@@ -1,0 +1,30 @@
+### IDE (JetBrains / IntelliJ / PhpStorm)
+.idea/
+*.iml
+
+### OS
+.DS_Store
+Thumbs.db
+
+### Certificates / secrets
+certs/
+traefik/certs/
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+
+### Traefik dynamic / local config
+dynamic/
+traefik/dynamic/
+traefik/traefik.yml
+traefik_dynamic.yml
+
+### Runtime / generated
+*.log
+*.tmp
+
+### Docker (opcjonalnie)
+.env
+.env.*
