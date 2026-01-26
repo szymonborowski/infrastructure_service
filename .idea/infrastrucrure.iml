@@ -4,5 +4,10 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="sso" />
+    <orderEntry type="module" module-name="users" />
+    <orderEntry type="module" module-name="frontend_vuejs" />
+    <orderEntry type="module" module-name="frontend" />
+    <orderEntry type="module" module-name="blog" />
   </component>
 </module>
