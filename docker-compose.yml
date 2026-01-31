@@ -14,6 +14,13 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - microservices
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rabbitmq.rule=Host(`rabbitmq.microservices.local`)"
+      - "traefik.http.routers.rabbitmq.entrypoints=websecure"
+      - "traefik.http.routers.rabbitmq.tls=true"
+      - "traefik.http.services.rabbitmq.loadbalancer.server.port=15672"
 
   traefik:
     image: traefik:v3.6
