@@ -21,3 +21,4 @@ certs/
 ### Docker (opcjonalnie)
 .env
 .env.*
+!.env.example
