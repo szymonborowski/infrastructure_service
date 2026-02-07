@@ -1,0 +1,20 @@
+# Version control
+.git
+.gitignore
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE and editor
+.idea
+.vscode
+.editorconfig
+
+# Documentation
+*.md
+
+# Compose and scripts (not part of image)
+docker-compose.yml
+run.sh
