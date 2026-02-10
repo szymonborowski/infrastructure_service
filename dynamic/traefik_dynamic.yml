@@ -8,5 +8,9 @@ tls:
       keyFile: /certs/frontend.microservices.local-key.pem
     - certFile: /certs/admin.microservices.local.pem
       keyFile: /certs/admin.microservices.local-key.pem
+    - certFile: /certs/blog.microservices.local.pem
+      keyFile: /certs/blog.microservices.local-key.pem
+    - certFile: /certs/users.microservices.local.pem
+      keyFile: /certs/users.microservices.local-key.pem
     - certFile: /certs/rabbitmq.microservices.local.pem
       keyFile: /certs/rabbitmq.microservices.local-key.pem
