@@ -1,0 +1,50 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # Docker container logs
+  - job_name: docker
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+
+    relabel_configs:
+      # Only scrape containers on microservices or web networks
+      - source_labels: ['__meta_docker_network_name']
+        regex: '(microservices|web)'
+        action: keep
+
+      # Add container name (always present - ensures at least one label)
+      - source_labels: ['__meta_docker_container_name']
+        target_label: 'container'
+        action: replace
+
+      # Add service name from compose label (only if not empty)
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
+        target_label: 'service'
+        regex: '(.+)'
+        action: replace
+
+      # Add project name (only if not empty)
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_project']
+        target_label: 'project'
+        regex: '(.+)'
+        action: replace
+
+      # Stream type (stdout/stderr - always present)
+      - source_labels: ['__meta_docker_container_log_stream']
+        target_label: 'stream'
+        action: replace
+
+    # Pipeline stages to ensure labels are properly set
+    pipeline_stages:
+      - docker: {}
+      - static_labels:
+          job: docker

@@ -14,3 +14,7 @@ tls:
       keyFile: /certs/users.microservices.local-key.pem
     - certFile: /certs/rabbitmq.microservices.local.pem
       keyFile: /certs/rabbitmq.microservices.local-key.pem
+    - certFile: /certs/grafana.microservices.local.pem
+      keyFile: /certs/grafana.microservices.local-key.pem
+    - certFile: /certs/prometheus.microservices.local.pem
+      keyFile: /certs/prometheus.microservices.local-key.pem
