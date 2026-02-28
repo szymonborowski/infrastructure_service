@@ -1,0 +1,46 @@
+loki:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 50Gi
+
+  config:
+    auth_enabled: false
+
+    limits_config:
+      retention_period: 744h  # 31 days
+      ingestion_rate_mb: 10
+      ingestion_burst_size_mb: 20
+
+    compactor:
+      retention_enabled: true
+
+# Promtail - log shipper (DaemonSet na każdym node)
+promtail:
+  enabled: true
+  config:
+    clients:
+      - url: http://loki.monitoring.svc:3100/loki/api/v1/push
+
+    snippets:
+      scrapeConfigs: |
+        - job_name: kubernetes-pods
+          kubernetes_sd_configs:
+            - role: pod
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
+              action: replace
+              target_label: app
+            - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_component]
+              action: replace
+              target_label: component
+            - source_labels: [__meta_kubernetes_namespace]
+              action: replace
+              target_label: namespace
+            - source_labels: [__meta_kubernetes_pod_name]
+              action: replace
+              target_label: pod
+
+# Grafana już zainstalowana przez kube-prometheus-stack
+grafana:
+  enabled: false

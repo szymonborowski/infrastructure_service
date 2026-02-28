@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: portfolio-services
+  namespace: portfolio
+  labels:
+    app.kubernetes.io/part-of: portfolio
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: portfolio
+
+  endpoints:
+    - port: http
+      path: /health  # Laravel health endpoint (jeśli istnieje)
+      interval: 30s
+      scrapeTimeout: 10s
+
+  namespaceSelector:
+    matchNames:
+      - portfolio

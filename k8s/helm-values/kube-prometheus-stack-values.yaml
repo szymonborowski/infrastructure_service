@@ -1,0 +1,70 @@
+# kube-prometheus-stack configuration
+fullnameOverride: prometheus
+
+# Prometheus configuration
+prometheus:
+  prometheusSpec:
+    retention: 30d
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+
+    # Service discovery - automatyczne wykrywanie wszystkich serwisów
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
+
+# Grafana configuration
+grafana:
+  enabled: true
+  adminPassword: "admin"  # TODO: Zmień w produkcji lub użyj Secret
+
+  persistence:
+    enabled: false  # Wyłączone dla uproszczenia - dane będą przechowywane w ConfigMaps
+
+  # Używamy domyślnych datasources z chart - Prometheus już jest dodany automatycznie
+  # Loki dodamy później przez additionalDataSources
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      url: http://loki.monitoring.svc:3100
+      access: proxy
+      isDefault: false
+
+  # Ingress dla Grafana (dostęp zewnętrzny) - opcjonalnie
+  ingress:
+    enabled: false  # Zmień na true jeśli chcesz dostęp przez ingress
+    # ingressClassName: nginx
+    # hosts:
+    #   - grafana.yourdomain.com
+    # tls:
+    #   - secretName: grafana-tls
+    #     hosts:
+    #       - grafana.yourdomain.com
+
+# AlertManager configuration
+alertmanager:
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+
+# Node metrics
+nodeExporter:
+  enabled: true
+
+# Kubernetes state metrics
+kubeStateMetrics:
+  enabled: true
+
+# Prometheus Operator
+prometheusOperator:
+  enabled: true
