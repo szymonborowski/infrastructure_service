@@ -1,0 +1,141 @@
+# ArgoCD Application CRDs for continuous deployment from git
+# Install ArgoCD first: kubectl create namespace argocd && kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+---
+# Install ArgoCD Helm chart
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portfolio-admin
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/szymonborowski/portfolio
+    targetRevision: master
+    path: admin/k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: microservices
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portfolio-blog
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/szymonborowski/portfolio
+    targetRevision: master
+    path: blog/k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: microservices
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portfolio-frontend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/szymonborowski/portfolio
+    targetRevision: master
+    path: frontend/k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: microservices
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portfolio-sso
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/szymonborowski/portfolio
+    targetRevision: master
+    path: sso/k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: microservices
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portfolio-users
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/szymonborowski/portfolio
+    targetRevision: master
+    path: users/k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: microservices
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portfolio-analytics
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/szymonborowski/portfolio
+    targetRevision: master
+    path: analytics/k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: microservices
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
