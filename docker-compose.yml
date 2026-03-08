@@ -2,7 +2,6 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: rabbitmq
     restart: unless-stopped
     ports:
       - "127.0.0.1:5672:5672"
@@ -30,7 +29,6 @@ services:
 
   traefik:
     image: traefik:v3.6
-    container_name: traefik
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -93,7 +91,6 @@ services:
   # Prometheus - Metrics storage and scraping
   prometheus:
     image: prom/prometheus:v2.51.0
-    container_name: prometheus
     restart: unless-stopped
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -123,7 +120,6 @@ services:
   # Loki - Log aggregation
   loki:
     image: grafana/loki:3.0.0
-    container_name: loki
     restart: unless-stopped
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
@@ -143,7 +139,6 @@ services:
   # Promtail - Log shipper (reads Docker logs)
   promtail:
     image: grafana/promtail:3.0.0
-    container_name: promtail
     restart: unless-stopped
     command: -config.file=/etc/promtail/config.yaml
     volumes:
@@ -158,7 +153,6 @@ services:
   # Grafana - Visualization dashboard
   grafana:
     image: grafana/grafana:10.4.0
-    container_name: grafana
     restart: unless-stopped
     environment:
       - GF_SECURITY_ADMIN_USER=admin
