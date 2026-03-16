@@ -1,3 +1,9 @@
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
 
   rabbitmq:
@@ -26,6 +32,7 @@ services:
       - "traefik.http.routers.rabbitmq.entrypoints=websecure"
       - "traefik.http.routers.rabbitmq.tls=true"
       - "traefik.http.services.rabbitmq.loadbalancer.server.port=15672"
+    logging: *default-logging
 
   traefik:
     image: traefik:v3.6
@@ -87,6 +94,7 @@ services:
       # Basic‑auth middleware
       # - "traefik.http.middlewares.dashboard-auth.basicauth.users=admin:$$apr1$$0B/Dz.El$$GnZpNWj.sHjWmc888iwQn."
       # - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
+    logging: *default-logging
 
   # Prometheus - Metrics storage and scraping
   prometheus:
@@ -116,6 +124,7 @@ services:
       - "traefik.http.routers.prometheus.entrypoints=websecure"
       - "traefik.http.routers.prometheus.tls=true"
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+    logging: *default-logging
 
   # Loki - Log aggregation
   loki:
@@ -135,6 +144,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    logging: *default-logging
 
   # Promtail - Log shipper (reads Docker logs)
   promtail:
@@ -149,6 +159,7 @@ services:
       - microservices
     depends_on:
       - loki
+    logging: *default-logging
 
   # Grafana - Visualization dashboard
   grafana:
@@ -182,6 +193,7 @@ services:
       - "traefik.http.routers.grafana.entrypoints=websecure"
       - "traefik.http.routers.grafana.tls=true"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    logging: *default-logging
 
 networks:
   web:
