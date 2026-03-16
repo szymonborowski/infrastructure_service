@@ -33,6 +33,11 @@ services:
       - "traefik.http.routers.rabbitmq.tls=true"
       - "traefik.http.services.rabbitmq.loadbalancer.server.port=15672"
     logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+          cpus: '0.50'
 
   traefik:
     image: traefik:v3.6
