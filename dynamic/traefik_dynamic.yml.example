@@ -1,0 +1,20 @@
+tls:
+  certificates:
+    - certFile: /certs/traefik.${DOMAIN}.pem
+      keyFile: /certs/traefik.${DOMAIN}-key.pem
+    - certFile: /certs/sso.${DOMAIN}.pem
+      keyFile: /certs/sso.${DOMAIN}-key.pem
+    - certFile: /certs/frontend.${DOMAIN}.pem
+      keyFile: /certs/frontend.${DOMAIN}-key.pem
+    - certFile: /certs/admin.${DOMAIN}.pem
+      keyFile: /certs/admin.${DOMAIN}-key.pem
+    - certFile: /certs/blog.${DOMAIN}.pem
+      keyFile: /certs/blog.${DOMAIN}-key.pem
+    - certFile: /certs/users.${DOMAIN}.pem
+      keyFile: /certs/users.${DOMAIN}-key.pem
+    - certFile: /certs/rabbitmq.${DOMAIN}.pem
+      keyFile: /certs/rabbitmq.${DOMAIN}-key.pem
+    - certFile: /certs/grafana.${DOMAIN}.pem
+      keyFile: /certs/grafana.${DOMAIN}-key.pem
+    - certFile: /certs/prometheus.${DOMAIN}.pem
+      keyFile: /certs/prometheus.${DOMAIN}-key.pem

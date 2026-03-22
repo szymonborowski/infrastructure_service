@@ -17,6 +17,7 @@ certs/
 ### Runtime / generated
 *.log
 *.tmp
+dynamic/traefik_dynamic.yml
 
 ### Docker (opcjonalnie)
 .env
