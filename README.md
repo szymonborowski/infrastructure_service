@@ -84,10 +84,11 @@ Shared infrastructure layer for the portfolio microservices platform. Provides A
 
 ### Development
 
-```bash
-cp .env.example .env
-# Edit .env with your configuration
+This service is bootstrapped automatically by `install.sh` from the [portfolio](https://github.com/szymonborowski/portfolio) repo, which generates `.env` and `dynamic/traefik_dynamic.yml` from their `.example` templates.
 
+To start manually after setup:
+
+```bash
 docker compose up -d
 ```
 
@@ -95,19 +96,21 @@ This should be started **before** all other services (they depend on Traefik and
 
 ### Accessing Dashboards
 
+Domain is set via `DOMAIN` in `.env` (default: `microservices.local`).
+
 | Service | URL |
 |---------|-----|
-| Traefik | `https://traefik.microservices.local` |
-| RabbitMQ | `https://rabbitmq.microservices.local` |
-| Grafana | `https://grafana.microservices.local` |
-| Prometheus | `https://prometheus.microservices.local` |
+| Traefik | `https://traefik.<domain>` |
+| RabbitMQ | `https://rabbitmq.<domain>` |
+| Grafana | `https://grafana.<domain>` |
+| Prometheus | `https://prometheus.<domain>` |
 
 ## Configuration Files
 
 | File | Purpose |
 |------|---------|
 | `traefik.yml` | Traefik static configuration |
-| `dynamic/` | Traefik dynamic routing rules and TLS |
+| `dynamic/traefik_dynamic.yml.example` | Traefik TLS cert paths template (generated to `traefik_dynamic.yml` by install.sh) |
 | `certs/` | TLS certificates |
 | `prometheus.yml` | Prometheus scrape targets |
 | `loki-config.yaml` | Loki storage and ingestion config |
@@ -128,4 +131,4 @@ This should be started **before** all other services (they depend on Traefik and
 
 ## License
 
-All rights reserved.
+[MIT](../LICENSE)
