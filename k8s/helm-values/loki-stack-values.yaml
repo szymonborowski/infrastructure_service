@@ -18,6 +18,24 @@ loki:
 # Promtail - log shipper (DaemonSet na każdym node)
 promtail:
   enabled: true
+
+  # Volume mounts for containerd (OVH managed K8s uses containerd, not Docker)
+  extraVolumes:
+    - name: pods
+      hostPath:
+        path: /var/log/pods
+    - name: run-containerd
+      hostPath:
+        path: /run/containerd
+
+  extraVolumeMounts:
+    - name: pods
+      mountPath: /var/log/pods
+      readOnly: true
+    - name: run-containerd
+      mountPath: /run/containerd
+      readOnly: true
+
   config:
     clients:
       - url: http://loki.monitoring.svc:3100/loki/api/v1/push
@@ -27,7 +45,16 @@ promtail:
         - job_name: kubernetes-pods
           kubernetes_sd_configs:
             - role: pod
+          pipeline_stages:
+            - cri: {}
           relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_uid, __meta_kubernetes_pod_container_name]
+              separator: /
+              replacement: /var/log/pods/*$1/$2/*.log
+              target_label: __path__
+            - action: drop
+              source_labels: [__meta_kubernetes_pod_container_init]
+              regex: "true"
             - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
               action: replace
               target_label: app
@@ -40,6 +67,9 @@ promtail:
             - source_labels: [__meta_kubernetes_pod_name]
               action: replace
               target_label: pod
+            - source_labels: [__meta_kubernetes_pod_container_name]
+              action: replace
+              target_label: container
 
 # Grafana już zainstalowana przez kube-prometheus-stack
 grafana:

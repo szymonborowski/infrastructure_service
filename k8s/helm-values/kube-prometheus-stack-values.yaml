@@ -18,16 +18,28 @@ prometheus:
     serviceMonitorSelector: {}
     serviceMonitorNamespaceSelector: {}
 
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/whitelist-source-range: "79.186.58.130/32"
+    hosts:
+      - prometheus.borowski.services
+    tls:
+      - secretName: prometheus-tls
+        hosts:
+          - prometheus.borowski.services
+
 # Grafana configuration
 grafana:
   enabled: true
-  adminPassword: "admin"  # TODO: Zmień w produkcji lub użyj Secret
+  adminPassword: "3mqrDCPxbstnUROFAVWz"
 
   persistence:
-    enabled: false  # Wyłączone dla uproszczenia - dane będą przechowywane w ConfigMaps
+    enabled: false
 
-  # Używamy domyślnych datasources z chart - Prometheus już jest dodany automatycznie
-  # Loki dodamy później przez additionalDataSources
   additionalDataSources:
     - name: Loki
       type: loki
@@ -35,16 +47,19 @@ grafana:
       access: proxy
       isDefault: false
 
-  # Ingress dla Grafana (dostęp zewnętrzny) - opcjonalnie
   ingress:
-    enabled: false  # Zmień na true jeśli chcesz dostęp przez ingress
-    # ingressClassName: nginx
-    # hosts:
-    #   - grafana.yourdomain.com
-    # tls:
-    #   - secretName: grafana-tls
-    #     hosts:
-    #       - grafana.yourdomain.com
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/whitelist-source-range: "79.186.58.130/32"
+    hosts:
+      - grafana.borowski.services
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.borowski.services
 
 # AlertManager configuration
 alertmanager:
