@@ -71,6 +71,9 @@ promtail:
               action: replace
               target_label: container
 
-# Grafana już zainstalowana przez kube-prometheus-stack
+# Loki datasource provisioned by kube-prometheus-stack, not loki-stack
 grafana:
   enabled: false
+  sidecar:
+    datasources:
+      enabled: false
